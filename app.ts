@@ -5,9 +5,19 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as ejs from 'ejs';
+import * as mongoose from 'mongoose';
 
 import routes from './routes/index';
 import users from './routes/users';
+import appMessages from './api/appMessages';
+
+const CONNECTION_STRING = 'mongodb://CMDave:pw1234@ds011902.mlab.com:11902/eightball-dev';
+
+mongoose.connect(CONNECTION_STRING).then((response)=>{
+  console.log('connection established...');
+}).catch((err)=>{
+  console.log(err.message);
+});
 
 let app = express();
 
@@ -28,6 +38,7 @@ app.use('/api', express.static(path.join(__dirname, 'api')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/api/appMessages', appMessages);
 
 
 // redirect 404 to home for the sake of AngularJS client-side routes
